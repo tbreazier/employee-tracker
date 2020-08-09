@@ -1,6 +1,5 @@
 const inquirer = require('inquirer');
 const logo = require('asciiart-logo');
-const { type } = require('os');
 
 const menu = async() => {
     console.log(logo({ 
@@ -22,10 +21,12 @@ const menu = async() => {
             'Add role',
             'Add employee',
             'Update employee role',
+            'Exit application',
         ],
 
 
 
     })
 }
+ menu();
 
