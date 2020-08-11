@@ -110,9 +110,26 @@ const viewAllRoles = () => {
         );
 };
 
-// const addDepartment = () => {
+const addDepartment = async () => {
+    const response = await inquirer
+        .prompt([
+            {
+                name: 'newDepartment',
+                type: 'input',
+                message: 'What is the name of the new department?'
+            },
+        ]);
+    const query = connection.query
+        ("INSERT INTO departments SET ?",
+        { dept_name: response.newDepartment },
+            function (err, res) {
+                if (err) throw err;
 
-// };
+                viewAllDepartments();
+                menu();
+            }
+        );
+};
 
 // const addRole = () => {
 
@@ -127,4 +144,3 @@ const viewAllRoles = () => {
 // };
 
 menu();
-
