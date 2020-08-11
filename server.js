@@ -1,21 +1,33 @@
+const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const logo = require('asciiart-logo');
-const allFunction = require('./utils/all.js');
-const departmentFunction = require('./utils/department.js');
+const consoleTable = require('console.table');
+const config = require('./package.json');
 
+const connection = mysql.createConnection({
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: '',
+    database: 'employee_tracker',
+});
 
-const menu = async() => {
-    // console.log(logo({ 
-    //   name: 'Employee Tracker', 
-    //   logoColor: 'green', 
-    //   borderColor: 'white'})
-    //   .render()
-    // );
+connection.connect((err => {
+    if (err) throw err;
+}));
 
-    console.log('Welcome to the employee tracker!');
+console.log(logo({ 
+    name: 'Employee Tracker', 
+    logoColor: 'green', 
+    borderColor: 'white'})
+    .render()
+);
 
-    await inquirer.prompt({
-        name: 'initial',
+const menu = async () => {
+    const response = await inquirer
+        .prompt([
+        {
+        name: 'action',
         type: 'list', 
         message: 'What would you like to do?',
         choices: [
@@ -27,19 +39,43 @@ const menu = async() => {
             'Add employee',
             'Update employee role',
             'Exit application',
-        ],
-    })
-    .then((answer) => {
-        switch (answer.action) {
-            case 'View all employees':
-                allFunction.displayAll(menu);
-                break;
-            
-            case 'View all departments':
-                departmentFunction.displayAllDepart(menu);
-                break;
+            ],
+        },   
+    ]);
+    switch (response.action) {
+        case 'View all employees':
+            viewAllEmployees();
+            break;
+    }        
+};
+
+const viewAllEmployees = () => {
+    connection.query
+    ("SELECT * FROM employees;",
+        function (err, res){
+        if (err) throw err;
+        
+        console.table(res);
+        menu();
         }
-    })
-}
+    );
+};
+
+const viewAllDepartments = () => {
+
+};
+
+const viewAllRoles = () => {
+
+};
+
+const addDepartment = () => {
+
+};
+
+const addRole = () => {
+
+};
+
 menu();
 
